@@ -1,0 +1,44 @@
+<aura:component implements="flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId" access="global" controller="Object_CustomRelatedListController">
+	
+    <!--Attributes needed to appply all logic in this lightning component-->
+	<aura:attribute name="data" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="pageNumber" type="Integer" default="1"/>
+    <aura:attribute name="pageSize" type="Integer" default="2"/>
+    <aura:attribute name="isLastPage" type="Boolean" default="false"/>
+    <aura:attribute name="dataSize" type="Integer" default="0"/>
+    <aura:attribute name="totalNumberRecords" type="Integer" default="0"/> 
+    
+    <aura:attribute name="recordId" type="String" />
+    
+    <!--Events-->
+    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
+     
+    <div class="slds-m-around_none">
+        <div class="slds-clearfix">
+            <div class="slds-page-header" role="banner">
+                <p class="slds-page-header__title">Custom Related List (Child and grandchilds)</p>
+            </div>
+        </div>
+         
+        <lightning:datatable aura:id = "accDT"
+                             columns = "{!v.columns}"
+                             maxRowSelection="{!v.maxRowSelection}"
+                             data = "{!v.data}"
+                             keyField = "Id"
+                             selectedRows = "{!v.selectedRowList}"
+                             onrowaction="{!c.handleRowAction}"/>
+         
+        <div class="slds-clearfix">
+            <div class="slds-page-header" role="banner">
+                <div class="slds-float_right">            
+                    <lightning:button aura:id="prev" label="Prev" iconName="utility:chevronleft" iconPosition="left"
+                                      onclick="{!c.handlePrev}" disabled="{! v.pageNumber == 1}"/>
+                    <lightning:button aura:id="next" label="Next" iconName="utility:chevronright" iconPosition="right"
+                                      disabled="{! v.isLastPage}" onclick="{!c.handleNext}"/>
+                </div>
+                <div class="slds-text-body_regular">Page {!v.pageNumber} | Showing records from {! ((v.pageNumber-1)*v.pageSize)+' to '+((v.pageNumber-1)*v.pageSize+v.dataSize)} &nbsp;&nbsp;(#Total: {!v.totalNumberRecords})</div>
+            </div>
+        </div>
+    </div>
+</aura:component>
